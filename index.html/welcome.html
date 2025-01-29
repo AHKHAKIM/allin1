@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Sidebar with Animation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #16d9e3, #30c7ec, #46aef7);
+            font-family: sans-serif;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Sidebar Styling */
+        nav {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            transition: 0.5s;
+            padding-top: 60px;
+            border-radius: 0 20px 20px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        nav.nav-open {
+            left: 0;
+        }
+
+        nav .nav-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.5s, transform 0.5s;
+            margin-top: 50px;
+        }
+
+        nav.nav-open .nav-links {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        nav .nav-links a {
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 600;
+            padding: 15px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        nav .nav-links a:hover {
+            background: #16d9e3;
+            color: white;
+        }
+
+        /* Menu Button */
+        .menu-btn {
+            position: absolute;
+            top: 15px;
+            right: -50px;
+            width: 40px;
+            height: 40px;
+            background: #16d9e3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu-btn:hover {
+            background: #0fb9d3;
+        }
+
+        .menu-btn i {
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Rotating animation */
+        nav.nav-open .menu-btn i {
+            transform: rotate(180deg);
+        }
+
+        /* Animated Welcome Text */
+        .animated-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            overflow: hidden;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .animated-text.hide {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .animated-text span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+            animation: fadeInUp 1s forwards;
+        }
+
+        /* Keyframe Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animating each letter */
+        .animated-text span:nth-child(1) { animation-delay: 0.1s; }
+        .animated-text span:nth-child(2) { animation-delay: 0.2s; }
+        .animated-text span:nth-child(3) { animation-delay: 0.3s; }
+        .animated-text span:nth-child(4) { animation-delay: 0.4s; }
+        .animated-text span:nth-child(5) { animation-delay: 0.5s; }
+        .animated-text span:nth-child(6) { animation-delay: 0.6s; }
+        .animated-text span:nth-child(7) { animation-delay: 0.7s; }
+
+        /* Logout Button Styling */
+        .logout-btn {
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            background: #e74c3c;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <nav>
+        <div class="menu-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links">
+            <a href="#">Manta</a>
+            <a href="#">Image ReGenerate</a>
+            <a href="#">Tender Calculator</a>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="logout-btn">Logout</button>
+    </nav>
+
+    <!-- Animated Welcome Text -->
+    <div class="animated-text">
+        <span>W</span><span>e</span><span>l</span><span>c</span><span>o</span><span>m</span><span>e</span>
+    </div>
+
+    <script>
+        var menuBtn = document.querySelector('.menu-btn');
+        var nav = document.querySelector('nav');
+        var menuIcon = document.querySelector('.menu-btn i');
+        var animatedText = document.querySelector('.animated-text');
+
+        menuBtn.addEventListener('click', (event) => {
+            nav.classList.toggle('nav-open');
+            animatedText.classList.toggle('hide');
+
+            if (nav.classList.contains('nav-open')) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            } else {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
+            event.stopPropagation(); 
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!nav.contains(event.target) && !menuBtn.contains(event.target)) {
+                nav.classList.remove('nav-open');
+                animatedText.classList.remove('hide');
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
+        });
+
+        // Logout button functionality
+        document.querySelector('.logout-btn').addEventListener('click', () => {
+            window.location.href = "login.html"; // Redirect to login page
+        });
+    </script>
+
+</body>
+</html>
